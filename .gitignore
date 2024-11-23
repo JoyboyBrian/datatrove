@@ -161,3 +161,6 @@ cython_debug/
 .vscode/
 
 playground/
+
+my_local_logs_path/
+test_local_logs_path/

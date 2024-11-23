@@ -15,9 +15,9 @@ parser.add_argument("output_name", type=str, help="Name of the output dataset")
 parser.add_argument("--n_tasks", type=int, help="number of tasks", default=100)
 parser.add_argument("--text_key", type=str, help="text column", default="text")
 
-ORG_NAME = "my_org"
-LOCAL_PATH = "my_local_path"
-LOCAL_LOGS_PATH = "my_local_logs_path"
+ORG_NAME = "JoyboyBrian"
+LOCAL_PATH = "/home/ubuntu/datatrove/my_local_path"
+LOCAL_LOGS_PATH = "/home/ubuntu/datatrove/my_local_logs_path"
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         job_name=f"filter-{args.output_name}",
         pipeline=[
             ParquetReader(args.input_dataset, glob_pattern="**/*.parquet", text_key=args.text_key),
-            LambdaFilter(lambda doc: "hugging" in doc.text),  # add your custom filter here
+            LambdaFilter(lambda doc: "query" in doc.text),  # add your custom filter here
             HuggingFaceDatasetWriter(
                 dataset=f"{ORG_NAME}/{args.output_name}",
                 private=True,
@@ -41,10 +41,10 @@ if __name__ == "__main__":
         ],
         tasks=args.n_tasks,
         time="20:00:00",
-        partition="hopper-cpu",
+        partition="debug",
         logging_dir=f"{LOCAL_LOGS_PATH}/{args.output_name}",
         cpus_per_task=12,
         qos="high",
-        mem_per_cpu_gb=3,
+        mem_per_cpu_gb=1,
     )
     dist_executor.run()
